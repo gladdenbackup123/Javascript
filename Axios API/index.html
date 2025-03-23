@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Axios API Posts</title>
+    <style>
+      /* Global Styles */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f2f5;
+        padding: 20px;
+        color: #333;
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      /* Form Styles */
+      form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto 20px;
+      }
+
+      form label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      form button {
+        padding: 10px 15px;
+        border: none;
+        background: #007bff;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      form button:hover {
+        background: #0056b3;
+      }
+
+      /* Posts Container */
+      #postsContainer {
+        max-width: 800px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      /* Individual Post Styles */
+      .post {
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .post h3 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .post p {
+        color: #666;
+      }
+
+      .delete-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #e74c3c;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        line-height: 25px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .delete-btn:hover {
+        background: #c0392b;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <h2>Posts :</h2>
+
+    <form id="postForm">
+      <label for="postTitle">Post Title :</label>
+      <input type="text" id="postTitle" placeholder="Post Title" required />
+      <br />
+      <label for="postBody">Post Body :</label>
+      <input id="postBody" placeholder="Post Body" required />
+      <br />
+      <button type="submit">Add Post</button>
+      <br />
+    </form>
+
+    <div id="postsContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const postsContainer = document.getElementById("postsContainer");
+      const postForm = document.getElementById("postForm");
+      const titleInput = document.getElementById("postTitle");
+      const bodyInput = document.getElementById("postBody");
+
+      // Add a new Post
+      postForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const newPost = {
+          title: titleInput.value,
+          body: bodyInput.value,
+          userId: 1
+        };
+
+        axios
+          .post("https://jsonplaceholder.typicode.com/posts", newPost)
+          .then(response => {
+            renderPost(response.data);
+            postForm.reset();
+            alert("Post Added successfully!");
+          })
+          .catch(error => {
+            alert("Error adding Post, try again!");
+          });
+      });
+
+      // Delete a Post
+      function deletePost(id) {
+        axios
+          .delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+          .then(() => {
+            alert("Post deleted successfully!");
+            getPosts();
+          })
+          .catch(error => {
+            alert("Error deleting post!");
+          });
+      }
+
+      // Render individual post to the DOM
+      function renderPost(post) {
+        const div = document.createElement("div");
+        div.className = "post";
+        div.innerHTML = `
+          <h3>${post.title}</h3>
+          <p>${post.body}</p>
+          <span class="delete-btn" onclick="deletePost(${post.id})">X</span>
+        `;
+        postsContainer.appendChild(div);
+      }
+
+      // Fetch and render posts
+      function getPosts() {
+        postsContainer.innerHTML = ""; // Clear existing posts
+        axios
+          .get("https://jsonplaceholder.typicode.com/posts?_limit=10")
+          .then(response => {
+            response.data.forEach(post => {
+              renderPost(post);
+            });
+          })
+          .catch(error => {
+            console.log("Something went wrong!");
+          });
+      }
+
+      getPosts();
+    </script>
+  </body>
+</html>
