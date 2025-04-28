@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Local Storage in JS</title>
+  </head>
+  <body>
+
+    <h2>Step 2 - Input Field to Save Value</h2>
+    <input type="text" id="keyInput" placeholder="Enter your Key">
+    <input type="text" id="valueInput" placeholder="Enter your Value">
+    <button onclick="storeData()">Store Data</button>
+    <button onclick="retrieveData()">Show Data</button>
+
+    <h2>Step 3 - Delete Item</h2>
+    <input type="text" id="keyDelete" placeholder="Enter key to Delete">
+    <button onclick="deleteData()">Delete Item</button>
+
+    <h2>Step 4 - Clear Local Storage</h2>
+    <button onclick="clearStorage()">Clear Storage</button>
+
+    <h2>Step 5 - Store and Retrieve Array</h2>
+    <button onclick="storeArray()">Store Colors</button>
+    <button onclick="showArray()">Show Colors</button>
+    
+    <script>
+        function storeData(){
+            const key = document.getElementById('keyInput').value;
+            const value = document.getElementById('valueInput').value;
+            localStorage.setItem(key,value);
+            alert("Key Value pair stored in Local Storage!")
+        }
+
+        function retrieveData(){
+            const key = document.getElementById('keyInput').value;
+            const value = localStorage.getItem(key);
+            alert('Stored value is : ' +value);
+        }
+
+        function deleteData(){
+            const key = document.getElementById('keyDelete').value;
+            localStorage.removeItem(key);
+            alert('The key value has been deleted from local storage.')
+        }
+
+        function clearStorage(){
+            localStorage.clear();
+            alert("All local data cleared.");
+        }
+
+        function storeArray(){
+            const colors = ['red','blue','green','yellow'];
+            localStorage.setItem('colors',JSON.stringify(colors));
+        }
+
+        function showArray(){
+            const colors = JSON.parse(localStorage.getItem('colors'));
+            console.log(colors);
+            alert("Check console for colors!")
+        }
+    </script>
+  </body>
+</html>

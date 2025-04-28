@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Local Storage in JS</title>
+  </head>
+  <body>
+    <h1> Step 1 - Store and Retrieve</h1>
+    <button onclick="storeData()">Store Name</button>
+    <button onclick="retrieveData()">Retrieve Name</button>
+
+
+    <script>
+        function storeData(){
+            localStorage.setItem('name','Gladden');
+            localStorage.setItem('city','Mumbai');
+            alert('Name and city stored in Local Storage');
+        }
+
+        function retrieveData(){
+            const name = localStorage.getItem('name');
+            alert('Stored name is :'+name);
+        }
+
+    </script>
+  </body>
+</html>
